@@ -57,7 +57,7 @@ function createModule({ accessKeyId, secretAccessKey, bucket, region }){
             const ommited = _.map( merged, item => _.omit( item, [ 'buffer' ]));
             const files = _.zipObject( kArray, ommited );           
             return {
-                files: files,
+                files,
                 fields: inspected.fields
             }             
         }

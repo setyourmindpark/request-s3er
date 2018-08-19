@@ -44,14 +44,14 @@ function createModule({ accessKeyId, secretAccessKey, bucket, region }){
             request.pipe( busboy );
             return deferred.promise;
         },
-        execute: async ({ request }) => {            
+        execute: async ({ request, subBucket }) => {            
             const inspected = await S3erModule.inspect({ request });            
             const kArray = _.keys( inspected.files );
             const vArray = _.values( inspected.files );
             const uArray = await q.all( _.map( vArray, item => { 
-                const defaultKey = replaceall( '-', '', uuidV4() );
-                const defaultBucket = bucket + '/' + moment().format( 'YYYYMMDD' );     
-                return S3Upload({ bucket: defaultBucket, key: defaultKey, buffer: item.buffer }) 
+                const key = replaceall( '-', '', uuidV4() );                
+                const bucketPath = _.isEmpty( subBucket ) ? bucket + '/' + moment().format( 'YYYYMMDD' ) : bucket + subBucket;     
+                return S3Upload({ bucket: bucketPath, key: key, buffer: item.buffer }) 
             }));
             const merged = _.merge( vArray, uArray );
             const ommited = _.map( merged, item => _.omit( item, [ 'buffer' ]));

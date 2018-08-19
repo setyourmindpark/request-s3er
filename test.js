@@ -22,7 +22,10 @@ const requestS3er = S3er.createModule({
 
 app.post('/execute', ( request, response ) => {
     ( async () => {        
+        // default sub bucket is date( /YYYYMMDD )
         response.send( await requestS3er.execute({ request }) );
+        // if you want to change bucket path, try below ( will be created sub buckets ( start with / ) )
+        // response.send( await requestS3er.execute({ request, subBucket: '/aaaa/bbbb' }) );
     })();    
 });
 

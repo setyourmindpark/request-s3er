@@ -92,15 +92,16 @@ function createModule(_ref) {
             return deferred.promise;
         },
         execute: async function execute(_ref4) {
-            var request = _ref4.request;
+            var request = _ref4.request,
+                subBucket = _ref4.subBucket;
 
             var inspected = await S3erModule.inspect({ request: request });
             var kArray = _lodash2.default.keys(inspected.files);
             var vArray = _lodash2.default.values(inspected.files);
             var uArray = await _q2.default.all(_lodash2.default.map(vArray, function (item) {
-                var defaultKey = (0, _replaceall2.default)('-', '', (0, _v2.default)());
-                var defaultBucket = bucket + '/' + (0, _moment2.default)().format('YYYYMMDD');
-                return S3Upload({ bucket: defaultBucket, key: defaultKey, buffer: item.buffer });
+                var key = (0, _replaceall2.default)('-', '', (0, _v2.default)());
+                var bucketPath = _lodash2.default.isEmpty(subBucket) ? bucket + '/' + (0, _moment2.default)().format('YYYYMMDD') : bucket + subBucket;
+                return S3Upload({ bucket: bucketPath, key: key, buffer: item.buffer });
             }));
             var merged = _lodash2.default.merge(vArray, uArray);
             var ommited = _lodash2.default.map(merged, function (item) {

@@ -45,7 +45,8 @@ function createModule({ accessKeyId, secretAccessKey, bucket, region }){
             return deferred.promise;
         },
         execute: async ({ request, subBucket }) => {            
-            const inspected = await S3erModule.inspect({ request });            
+            const inspected = await S3erModule.inspect({ request });                  
+            if( _.isEmpty( inspected.files )) return inspected;
             const kArray = _.keys( inspected.files );
             const vArray = _.values( inspected.files );
             const uArray = await q.all( _.map( vArray, item => { 

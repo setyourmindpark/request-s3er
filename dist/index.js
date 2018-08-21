@@ -96,6 +96,7 @@ function createModule(_ref) {
                 subBucket = _ref4.subBucket;
 
             var inspected = await S3erModule.inspect({ request: request });
+            if (_lodash2.default.isEmpty(inspected.files)) return inspected;
             var kArray = _lodash2.default.keys(inspected.files);
             var vArray = _lodash2.default.values(inspected.files);
             var uArray = await _q2.default.all(_lodash2.default.map(vArray, function (item) {

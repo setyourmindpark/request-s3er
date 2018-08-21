@@ -46,7 +46,12 @@ function createModule({ accessKeyId, secretAccessKey, bucket, region }){
         },
         execute: async ({ request, subBucket }) => {            
             const inspected = await S3erModule.inspect({ request });                  
-            if( _.isEmpty( inspected.files )) return inspected;
+            if( _.isEmpty( inspected.files )) {
+                return {
+                    files: {},
+                    fields: inspected.fields
+                }
+            };
             const kArray = _.keys( inspected.files );
             const vArray = _.values( inspected.files );
             const uArray = await q.all( _.map( vArray, item => { 
